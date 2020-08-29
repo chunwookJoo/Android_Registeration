@@ -9,11 +9,11 @@ import java.util.Map;
 
 public class LoginRequest extends StringRequest {
 
-    // 서버 URL 설정
+    //서버 URL 설정(php 파일 연동)
     final static private String URL = "http://jha970107.cafe24.com/Login.php";
-    private Map<String, String> map;
+    private Map<String, String>map;
 
-    public LoginRequest(String userID, String userPassword, Response.Listener<String> listener){
+    public LoginRequest(String userID, String userPassword, Response.Listener<String> listener) {
         super(Method.POST, URL, listener, null);
 
         map = new HashMap<>();
@@ -22,7 +22,7 @@ public class LoginRequest extends StringRequest {
     }
 
     @Override
-    protected Map<String, String> getParams() throws AuthFailureError {
+    protected Map<String, String>getParams() throws AuthFailureError {
         return map;
     }
 }

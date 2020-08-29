@@ -24,52 +24,59 @@ public class RegisterActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+        super.onCreate( savedInstanceState );
+        setContentView( R.layout.activity_register );
 
-        // 아이디값 찾아주기
-        et_id = findViewById(R.id.et_id);
-        et_pass = findViewById(R.id.et_pass);
-        et_name = findViewById(R.id.et_name);
-        et_age = findViewById(R.id.et_age);
+        //아이디값 찾아주기
+        et_id = findViewById( R.id.et_id );
+        et_pass = findViewById( R.id.et_pass );
+        et_name = findViewById( R.id.et_name );
+        et_age = findViewById( R.id.et_age );
 
-        // 회원가입 버튼 클릭시 실행
-        btn_register = findViewById(R.id.btn_register);
-        btn_register.setOnClickListener(new View.OnClickListener(){
+
+        //회원가입 버튼 클릭 시 수행
+        btn_register = findViewById( R.id.btn_register );
+        btn_register.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // EditText 에 현재 입력되어있는 값을 get(가져온다)
                 String userID = et_id.getText().toString();
-                String userPass = et_pass.getText().toString();
+                String userPass = et_id.getText().toString();
                 String userName = et_name.getText().toString();
-                int userAge = Integer.parseInt(et_age.getText().toString());
+                int userAge = Integer.parseInt( et_age.getText().toString() );
+
 
                 Response.Listener<String> responseListener = new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+
                         try {
-                            JSONObject jsonObject = new JSONObject(response);
-                            boolean success = jsonObject.getBoolean("success");
-                            // 회원등록 성공한 경우
-                            if (success) {
-                                Toast.makeText(getApplicationContext(), "회원 등록 성공", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                                startActivity(intent);
-                            }
-                            // 회원등록 실패한 경우
-                            else {
-                                Toast.makeText(getApplicationContext(), "회원 등록 실패", Toast.LENGTH_SHORT).show();
+                            JSONObject jsonObject = new JSONObject( response );
+                            boolean success = jsonObject.getBoolean( "success" );
+
+                            //회원가입 성공시
+                            if(success) {
+
+                                Toast.makeText( getApplicationContext(), "회원가입이 정상처리 되었습니다.", Toast.LENGTH_SHORT ).show();
+                                Intent intent = new Intent( RegisterActivity.this, LoginActivity.class );
+                                startActivity( intent );
+
+                                //회원가입 실패시
+                            } else {
+                                Toast.makeText( getApplicationContext(), "회원가입에 실패하였습니다.", Toast.LENGTH_SHORT ).show();
                                 return;
                             }
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+
                     }
                 };
-                // 서버로 Volley를 이용해서 요청을 함.
-                RegisterRequest registerRequest = new RegisterRequest(userID,userPass,userName,userAge, responseListener);
-                RequestQueue queue = Volley.newRequestQueue(RegisterActivity.this);
-                queue.add(registerRequest);
+
+                //서버로 Volley를 이용해서 요청
+                RegisterRequest registerRequest = new RegisterRequest( userID, userPass, userName, userAge, responseListener);
+                RequestQueue queue = Volley.newRequestQueue( RegisterActivity.this );
+                queue.add( registerRequest );
             }
         });
     }

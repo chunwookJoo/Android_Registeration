@@ -24,27 +24,26 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        super.onCreate( savedInstanceState );
+        setContentView( R.layout.activity_login );
 
-        et_id = findViewById(R.id.et_id);
-        et_pass = findViewById(R.id.et_pass);
-        btn_login = findViewById(R.id.btn_login);
-        btn_register = findViewById(R.id.btn_register);
+        et_id = findViewById( R.id.et_id );
+        et_pass = findViewById( R.id.et_pass );
 
-        // 회원가입 버튼 클릭 시 실행
-        btn_register.setOnClickListener(new View.OnClickListener() {
+        btn_register = findViewById( R.id.btn_register );
+        btn_register.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                startActivity(intent);
+                Intent intent = new Intent( LoginActivity.this, RegisterActivity.class );
+                startActivity( intent );
             }
         });
 
-        btn_login.setOnClickListener(new View.OnClickListener() {
+
+        btn_login = findViewById( R.id.btn_login );
+        btn_login.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // EditText 에 현재 입력되어있는 값을 get(가져온다)
                 String userID = et_id.getText().toString();
                 String userPass = et_pass.getText().toString();
 
@@ -52,34 +51,40 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            JSONObject jsonObject = new JSONObject(response);
-                            boolean success = jsonObject.getBoolean("success");
-                            // 로그인 성공한 경우
+                            JSONObject jsonObject = new JSONObject( response );
+                            boolean success = jsonObject.getBoolean( "success" );
 
-                            if (true) {
-                                Log.d("hi","hi");
-                                String userID = jsonObject.getString("userID");
-                                String userPass = jsonObject.getString("userPassword");
+                            if(success) {//로그인 성공시
 
-                                Toast.makeText(getApplicationContext(),"로그인 성공",Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                intent.putExtra("userID", userID);
-                                intent.putExtra("userPassword", userPass);
-                                startActivity(intent);
-                            }
-                            // 로그인 실패한 경우
-                            else {
-                                Toast.makeText(getApplicationContext(),"로그인 실패",Toast.LENGTH_SHORT).show();
+                                String userID = jsonObject.getString( "userID" );
+                                String userPass = jsonObject.getString( "userPassword" );
+                                String userName = jsonObject.getString( "userName" );
+                                String userAge = jsonObject.getString( "userAge" );
+
+                                Toast.makeText( getApplicationContext(), "로그인 성공", Toast.LENGTH_SHORT ).show();
+                                Intent intent = new Intent( LoginActivity.this, MainActivity.class );
+
+                                intent.putExtra( "userID", userID );
+                                intent.putExtra( "userPass", userPass );
+                                intent.putExtra( "userName", userName );
+                                intent.putExtra( "userAge", userAge );
+
+                                startActivity( intent );
+
+                            } else {//로그인 실패시
+                                Toast.makeText( getApplicationContext(), "로그인 실패", Toast.LENGTH_SHORT ).show();
                                 return;
                             }
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
                 };
-                LoginRequest loginRequest = new LoginRequest(userID,userPass, responseListener);
-                RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
-                queue.add(loginRequest);
+                LoginRequest loginRequest = new LoginRequest( userID, userPass, responseListener );
+                RequestQueue queue = Volley.newRequestQueue( LoginActivity.this );
+                queue.add( loginRequest );
+
             }
         });
     }
